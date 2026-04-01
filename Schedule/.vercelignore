@@ -1,0 +1,23 @@
+# Replit-specific files
+.local/
+.cache/
+.replit
+.replitignore
+replit.nix
+start.sh
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pythonlibs/
+
+# Runtime data (auto-generated, stored in /tmp on Vercel)
+groups.json
+user_groups.json
+pending_schedules.json
+scheduled_messages.json
+settings.json
+
+# Lock files (Vercel uses requirements.txt)
+uv.lock

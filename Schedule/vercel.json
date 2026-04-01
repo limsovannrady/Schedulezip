@@ -24,5 +24,13 @@
       "path": "/api/cron",
       "schedule": "* * * * *"
     }
-  ]
+  ],
+  "functions": {
+    "api/webhook.py": {
+      "maxDuration": 30
+    },
+    "api/cron.py": {
+      "maxDuration": 60
+    }
+  }
 }

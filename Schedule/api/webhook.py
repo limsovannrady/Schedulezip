@@ -9,16 +9,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from telegram import Update
 from bot_core import build_application
 
-_application = None
-
-
-async def get_application():
-    global _application
-    if _application is None:
-        _application = build_application(with_job_queue=False)
-        await _application.initialize()
-    return _application
-
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -28,9 +18,11 @@ class handler(BaseHTTPRequestHandler):
             update_data = json.loads(body)
 
             async def process():
-                app = await get_application()
+                app = build_application(with_job_queue=False)
+                await app.initialize()
                 update = Update.de_json(update_data, app.bot)
                 await app.process_update(update)
+                await app.shutdown()
 
             asyncio.run(process())
 

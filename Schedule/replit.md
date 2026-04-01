@@ -14,7 +14,7 @@ A Telegram bot for scheduling and sending messages to groups, built in Khmer lan
 ## Structure
 
 ```text
-/
+Schedule/
 ├── bot.py              # Entry point for Replit polling mode
 ├── bot_core.py         # All bot logic, handlers, and build_application()
 ├── api/
@@ -36,26 +36,39 @@ A Telegram bot for scheduling and sending messages to groups, built in Khmer lan
 
 ## Workflows
 
-- **Telegram Bot**: Runs `python3 bot.py` — polling mode for local/Replit development
+- **Start application**: Runs `cd Schedule && python bot.py` — polling mode for Replit development
 
 ## Vercel Deployment Steps
 
-1. Push code to GitHub
-2. Import repo in Vercel dashboard
-3. Set environment variables:
+1. Push the full repo to GitHub
+2. Go to [vercel.com](https://vercel.com) → **New Project** → Import your repo
+3. **Important**: In the project settings, set **Root Directory** to `Schedule`
+4. Set the following Environment Variables in Vercel dashboard:
    - `TELEGRAM_BOT_TOKEN` — bot token from @BotFather
-   - `ADMIN_ID` — your Telegram user ID
-   - `VERCEL=1` — enables `/tmp` data directory
-4. After deployment, set the webhook:
+   - `ADMIN_ID` — your Telegram user ID (e.g. `123456789`)
+   - `VERCEL` — set to `1` (enables `/tmp` as data directory)
+5. Click **Deploy**
+6. After deployment, register the webhook with Telegram (run once in your browser):
    ```
-   https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<your-domain>/api/webhook
+   https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://<your-vercel-domain>/api/webhook
+   ```
+7. Verify webhook is active:
+   ```
+   https://api.telegram.org/bot<YOUR_TOKEN>/getWebhookInfo
    ```
 
 ## Environment Variables
 
-- `TELEGRAM_BOT_TOKEN` (secret): The bot token from @BotFather
-- `ADMIN_ID` (optional): Telegram user ID of the admin (default: 5002402843)
-- `VERCEL` (Vercel only): Set to `1` to use `/tmp` as data directory
+| Variable            | Where        | Description                                      |
+|---------------------|--------------|--------------------------------------------------|
+| `TELEGRAM_BOT_TOKEN`| Secret       | Bot token from @BotFather                        |
+| `ADMIN_ID`          | Env var      | Telegram user ID of the admin                    |
+| `VERCEL`            | Vercel only  | Set to `1` to use `/tmp` as data directory       |
+
+## How It Works on Vercel
+
+- **`/api/webhook`** — Telegram sends every update to this endpoint. The function processes the update and responds.
+- **`/api/cron`** — Runs every minute (Vercel Cron). Checks `scheduled_messages.json` in `/tmp` and sends any due messages.
 
 ## Features
 
