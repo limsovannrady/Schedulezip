@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "framework": null,
+  "functions": {
+    "Schedule/api/webhook.py": {
+      "runtime": "python3.11",
+      "maxDuration": 30
+    },
+    "Schedule/api/cron.py": {
+      "runtime": "python3.11",
+      "maxDuration": 60
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/webhook",
+      "dest": "/Schedule/api/webhook.py"
+    },
+    {
+      "src": "/api/cron",
+      "dest": "/Schedule/api/cron.py"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "* * * * *"
+    }
+  ]
+}
